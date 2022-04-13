@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
-import WebSocket from "ws";
+import SocketIO, { Socket } from "socket.io"
+//import WebSocket from "ws";
 const app = express();
 //app 앞단 server 뒷단 js
 app.set("view engine", "pug");
@@ -10,9 +11,15 @@ const handleListen = () => console.log("listening on http://localhost:3000 ");
 
 app.get("/", (req, res) => res.render("home"));
 
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const httpServer = http.createServer(app);
+const wsServer = SocketIO(httpServer);
 
+
+wsServer.on("connection", socket =>{
+  console.log(socket);
+});
+/*
+const wss = new WebSocket.Server({ server });
 const sockets = [];
 wss.on("connection", (socket) => {
   sockets.push(socket);
@@ -33,5 +40,5 @@ wss.on("connection", (socket) => {
     }
   });
 });
-
-server.listen(3000, handleListen);
+*/
+httpServer.listen(3000, handleListen);
