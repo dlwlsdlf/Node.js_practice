@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
-import SocketIO, { Socket } from "socket.io"
+import SocketIO from "socket.io";
+
 //import WebSocket from "ws";
 const app = express();
 //app 앞단 server 뒷단 js
@@ -14,9 +15,13 @@ app.get("/", (req, res) => res.render("home"));
 const httpServer = http.createServer(app);
 const wsServer = SocketIO(httpServer);
 
-
-wsServer.on("connection", socket =>{
-  console.log(socket);
+wsServer.on("connection", (socket) => {
+  socket.on("enter_room", (roomName, done) => {
+    console.log(roomName);
+    setTimeout(()=>{
+      done("hello from the backend");
+    },10000);
+  });
 });
 /*
 const wss = new WebSocket.Server({ server });
